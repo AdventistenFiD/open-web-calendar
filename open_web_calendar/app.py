@@ -14,7 +14,7 @@ import zoneinfo
 from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
-from urllib.parse import ParseResult, unquote, urlparse
+from urllib.parse import ParseResult, urlparse
 
 import caldav
 import icalendar
@@ -40,6 +40,7 @@ from .config import environment as config
 from .convert.events import ConvertToEvents
 from .convert.ics import ConvertToICS
 from .encryption import EmptyFernetStore, FernetStore
+from .security import harden_specification, safe_css, safe_url
 
 if TYPE_CHECKING:
     from open_web_calendar.convert.base import ConversionStrategy
@@ -223,11 +224,12 @@ def get_specification(query=None):
         specification[parameter] = value
 
     specification.pop(PARAM_SPECIFICATION_URL, None)
-    return specification
+    return harden_specification(specification)
 
 
 def get_query_string():
-    return "?" + unquote(request.query_string.decode("utf-8"))
+    # Preserve URL encoding; templates escape the result for HTML attributes.
+    return "?" + request.query_string.decode("utf-8")
 
 
 def render_app_template(template, specification):
@@ -245,6 +247,8 @@ def render_app_template(template, specification):
         configuration=get_configuration(),
         json=json,
         get_query_string=get_query_string,
+        safe_url=safe_url,
+        safe_css=safe_css,
         html=lambda tid, **template_replacements: translate.html(
             language, translation_file, tid, **template_replacements
         ),

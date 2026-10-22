@@ -44,7 +44,23 @@ def clean_html(bad_html: str, spec: dict) -> str:
         }
     )
     cleaner = Cleaner(**kw)
-    result = cleaner.clean_html(f"<div>{bad_html}</div>").strip()
+    result = cleaner.clean_html(f"<div>{bad_html}</div>")
+    result = (
+        Cleaner(
+            scripts=True,
+            javascript=True,
+            embedded=True,
+            frames=True,
+            forms=True,
+            meta=True,
+            links=True,
+            style=True,
+            inline_style=True,
+            safe_attrs_only=True,
+        )
+        .clean_html(result)
+        .strip()
+    )
     if result.startswith("<div>"):
         result = result[5:-6]
     return result

@@ -12,6 +12,12 @@ This allows people to
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def _enable_legacy_script_customization(monkeypatch):
+    """These tests explicitly exercise the operator-enabled upstream feature."""
+    monkeypatch.setenv("OWC_ALLOW_CUSTOM_JAVASCRIPT", "true")
+
+
 @pytest.mark.parametrize(
     ("query", "tags"),
     [

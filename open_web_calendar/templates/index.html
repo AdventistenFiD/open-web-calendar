@@ -23,7 +23,7 @@ SPDX-License-Identifier: GPL-2.0-only
         </script>
         <link href="css/common.css" rel="stylesheet" type="text/css">
         <link href="css/index.css" rel="stylesheet" type="text/css">
-        <link rel="icon" type="image/x-icon" href="{{ specification["favicon"] }}">
+        <link rel="icon" type="image/x-icon" href="{{ safe_url(specification["favicon"]) }}">
         <script src="js/index.js"></script>
         <script src="js/navigation.js"></script>
         <script src="js/common.js"></script>
@@ -107,7 +107,7 @@ SPDX-License-Identifier: GPL-2.0-only
                         {% endif -%}
                         </a>
                     {%- endfor %}
-                    <a href="{{ specification['translate'] }}">{{ html("translate") }}</a>
+                    <a href="{{ safe_url(specification['translate']) }}">{{ html("translate") }}</a>
                 </p>
                 <div>
                     <fieldset>
@@ -123,7 +123,7 @@ SPDX-License-Identifier: GPL-2.0-only
                             <span id="language-chosen"></span>
                         </div>
                     </fieldset>
-                    <a href="{{ specification['translate'] }}">{{ html("translate") }}</a>
+                    <a href="{{ safe_url(specification['translate']) }}">{{ html("translate") }}</a>
                 </div>
             </section>
             <section id="configure-title">
@@ -424,15 +424,15 @@ SPDX-License-Identifier: GPL-2.0-only
                 <h2>{{ html("about-title") }}</h2>
                 {{ html("project-description") }}
                 <ul>
-                    <li><a href="{{ specification["contributing"] | safe }}">{{ html("improve") }}</a></li>
+                    <li><a href="{{ safe_url(specification["contributing"]) }}">{{ html("improve") }}</a></li>
                     <li>
-                        <a href="{{ specification["source_code"] | safe }}">{{ html("source-code") }}</a>
+                        <a href="{{ safe_url(specification["source_code"]) }}">{{ html("source-code") }}</a>
                         {{ html("version").format(version=
                         specification["version"] if specification["version"] else configuration["version"]
                         )
                         }}
                     </li>
-                    <li><a href="{{ specification["privacy_policy"] | safe }}">{{ html("privacy-policy") }}</a></li>
+                    <li><a href="{{ safe_url(specification["privacy_policy"]) }}">{{ html("privacy-policy") }}</a></li>
                 </ul>
             </section>
             <div class="bottom-navigation">

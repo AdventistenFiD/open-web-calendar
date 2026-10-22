@@ -14,6 +14,12 @@ from urllib.parse import quote
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def _enable_legacy_script_customization(monkeypatch):
+    """These tests explicitly exercise the operator-enabled upstream feature."""
+    monkeypatch.setenv("OWC_ALLOW_CUSTOM_JAVASCRIPT", "true")
+
+
 @pytest.mark.parametrize(
     ("raw"),
     [
@@ -31,7 +37,8 @@ def test_some_content_needs_to_be_embedded_fully(raw, param, included, client):
         "/calendar.html?" + (f"{param}={quote(raw)}" if included else "")
     ).text
     print(html)
-    assert (raw in html) == included
+    expected = raw.replace("<", r"\3c ") if param == "css" else raw
+    assert (expected in html) == included
 
 
 @pytest.mark.parametrize(

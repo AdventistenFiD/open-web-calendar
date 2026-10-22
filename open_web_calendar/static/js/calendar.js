@@ -45,9 +45,12 @@ function getQueries() {
 }
 
 function isSafeUrl(urlString) {
-    return !UNSAFE_URL_PROTOCOLS.some(function(protocol) {
-        return urlString.toLowerCase().startsWith(protocol.toLowerCase() + ":");
-    });
+    try {
+        const url = new URL(urlString, document.baseURI);
+        return ["http:", "https:", "mailto:", "tel:", "geo:", "webcal:"].includes(url.protocol);
+    } catch (_) {
+        return false;
+    }
 }
 
 /* Create a link around the HTML text.
